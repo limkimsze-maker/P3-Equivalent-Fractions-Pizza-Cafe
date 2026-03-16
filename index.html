@@ -12,8 +12,6 @@
     :root{
       --bg1:#120014;
       --bg2:#1d0626;
-      --glow:#ff9f1c;
-      --glow2:#ff4d00;
       --btnBlue1:#34a3ff;
       --btnBlue2:#0b63d1;
       --btnGreen1:#4fe66d;
@@ -98,8 +96,8 @@
       position:absolute;
       inset:0;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.18) 40%, rgba(0,0,0,.42)),
-        radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.28) 100%);
+        linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.14) 45%, rgba(0,0,0,.30)),
+        radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.22) 100%);
       pointer-events:none;
     }
 
@@ -111,7 +109,7 @@
       z-index:3;
       padding:10px 16px;
       border-radius:999px;
-      background:rgba(0,0,0,.35);
+      background:rgba(0,0,0,.38);
       color:#fff4cc;
       font-weight:800;
       font-size:clamp(12px, 1vw, 16px);
@@ -124,7 +122,7 @@
     .button-wrap{
       position:absolute;
       left:50%;
-      bottom:28px;
+      bottom:22px;
       transform:translateX(-50%);
       width:min(900px, calc(100% - 36px));
       display:grid;
@@ -173,7 +171,7 @@
 
     .mode-btn[disabled]{
       cursor:default;
-      opacity:.72;
+      opacity:.78;
       transform:none;
       filter:none;
     }
@@ -194,10 +192,10 @@
     .status{
       position:absolute;
       left:50%;
-      bottom:130px;
+      bottom:128px;
       transform:translateX(-50%);
       z-index:3;
-      min-width:min(500px, calc(100% - 40px));
+      width:min(560px, calc(100% - 40px));
       padding:10px 18px;
       text-align:center;
       font-weight:900;
@@ -205,7 +203,7 @@
       color:#fff4cc;
       text-shadow:0 2px 0 rgba(0,0,0,.35);
       border-radius:18px;
-      background:rgba(0,0,0,.30);
+      background:rgba(0,0,0,.34);
       backdrop-filter:blur(4px);
       box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
       opacity:0;
@@ -223,7 +221,7 @@
       bottom:8px;
       z-index:3;
       font-size:12px;
-      color:rgba(255,255,255,.9);
+      color:rgba(255,255,255,.92);
       text-shadow:0 1px 2px rgba(0,0,0,.45);
       background:rgba(0,0,0,.25);
       padding:5px 9px;
@@ -260,8 +258,8 @@
       }
 
       .status{
-        bottom:108px;
-        min-width:calc(100% - 24px);
+        bottom:104px;
+        width:calc(100% - 24px);
         font-size:clamp(14px, 4vw, 18px);
       }
     }
@@ -292,9 +290,9 @@
       <img class="cover" src="pizza_cafe_cover.png" alt="Pizza Cafe cover" />
       <div class="overlay"></div>
 
-      <div class="top-hint">Tap a mode to hear “Pizza Cafe!” and start</div>
+      <div class="top-hint">Choose a mode to hear “Pizza Cafe!” and begin</div>
 
-      <div class="status" id="statusText">Loading your mode...</div>
+      <div class="status" id="statusText">Loading...</div>
 
       <div class="button-wrap">
         <button class="mode-btn desktop" id="desktopBtn" type="button" aria-label="Open Desktop Mode">
@@ -317,76 +315,60 @@
   </audio>
 
   <script>
-  const DESKTOP_MODE_LINK = "https://limkimsze-maker.github.io/P3-Equivalent-Fractions-V1/";
-  const MOBILE_MODE_LINK  = "mobile.html";
+    const DESKTOP_MODE_LINK = "https://limkimsze-maker.github.io/P3-Equivalent-Fractions-V1/";
+    const MOBILE_MODE_LINK  = "https://limkimsze-maker.github.io/P3-Equivalent-Fraction-Mobile/";
 
-  const desktopBtn = document.getElementById("desktopBtn");
-  const mobileBtn = document.getElementById("mobileBtn");
-  const pizzaAudio = document.getElementById("pizzaAudio");
-  const statusText = document.getElementById("statusText");
+    const desktopBtn = document.getElementById("desktopBtn");
+    const mobileBtn = document.getElementById("mobileBtn");
+    const pizzaAudio = document.getElementById("pizzaAudio");
+    const statusText = document.getElementById("statusText");
 
-  let modeChosen = false;
-  let chosenLink = "";
+    let modeChosen = false;
+    let chosenLink = "";
 
-  function disableButtons() {
-    desktopBtn.disabled = true;
-    mobileBtn.disabled = true;
-  }
+    function disableButtons() {
+      desktopBtn.disabled = true;
+      mobileBtn.disabled = true;
+    }
 
-  function showStatus(text) {
-    statusText.textContent = text;
-    statusText.classList.add("show");
-  }
+    function showStatus(text) {
+      statusText.textContent = text;
+      statusText.classList.add("show");
+    }
 
-  function goTo(link) {
-    window.location.href = link;
-  }
+    function goTo(link) {
+      window.location.href = link;
+    }
 
-  function startMode(link, label) {
-    if (modeChosen) return;
-    modeChosen = true;
-    chosenLink = link;
+    function startMode(link, label) {
+      if (modeChosen) return;
+      modeChosen = true;
+      chosenLink = link;
 
-    disableButtons();
-    showStatus(`Pizza Cafe! Opening ${label}...`);
+      disableButtons();
+      showStatus(`Pizza Cafe! Opening ${label}...`);
 
-    pizzaAudio.pause();
-    pizzaAudio.currentTime = 0;
+      pizzaAudio.pause();
+      pizzaAudio.currentTime = 0;
 
-    const onEnded = () => {
-      pizzaAudio.removeEventListener("ended", onEnded);
-      goTo(chosenLink);
-    };
+      const onEnded = () => {
+        goTo(chosenLink);
+      };
 
-    pizzaAudio.addEventListener("ended", onEnded, { once: true });
+      pizzaAudio.addEventListener("ended", onEnded, { once: true });
 
-    pizzaAudio.play().catch(() => {
-      pizzaAudio.removeEventListener("ended", onEnded);
-      goTo(chosenLink);
-    });
-  }
+      pizzaAudio.play().catch(() => {
+        goTo(chosenLink);
+      });
+    }
 
-  desktopBtn.addEventListener("click", () => {
-    startMode(DESKTOP_MODE_LINK, "Desktop Mode");
-  });
-
-  mobileBtn.addEventListener("click", () => {
-    startMode(MOBILE_MODE_LINK, "Mobile Mode");
-  });
-
-  desktopBtn.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+    desktopBtn.addEventListener("click", () => {
       startMode(DESKTOP_MODE_LINK, "Desktop Mode");
-    }
-  });
+    });
 
-  mobileBtn.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+    mobileBtn.addEventListener("click", () => {
       startMode(MOBILE_MODE_LINK, "Mobile Mode");
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
