@@ -8,6 +8,9 @@
   />
   <title>Pizza Cafe: Fraction Frenzy</title>
 
+  <link rel="preload" as="image" href="pizza_cafe_cover.png" fetchpriority="high" />
+  <link rel="preload" as="audio" href="pizza-cafe.mp3" type="audio/mpeg" />
+
   <style>
     :root{
       --bg1:#120014;
@@ -82,12 +85,24 @@
       background:#17051f;
     }
 
+    .cover-back{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:blur(14px) brightness(.45) saturate(1.05);
+      transform:scale(1.08);
+    }
+
     .cover{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
       object-fit:cover;
+      object-position:center center;
       display:block;
       filter:saturate(1.05) contrast(1.02);
     }
@@ -117,6 +132,8 @@
       backdrop-filter:blur(4px);
       box-shadow:0 0 0 1px rgba(255,255,255,.1) inset;
       text-align:center;
+      width:max-content;
+      max-width:calc(100% - 24px);
     }
 
     .button-wrap{
@@ -153,6 +170,8 @@
       align-items:center;
       justify-content:center;
       gap:14px;
+      position:relative;
+      z-index:4;
     }
 
     .mode-btn:hover{
@@ -239,10 +258,21 @@
         padding:0;
       }
 
+      .cover{
+        object-fit:contain;
+        object-position:center center;
+      }
+
+      .top-hint{
+        top:10px;
+        width:calc(100% - 20px);
+        font-size:clamp(11px, 3.2vw, 14px);
+      }
+
       .button-wrap{
         width:calc(100% - 24px);
         gap:12px;
-        bottom:18px;
+        bottom:14px;
       }
 
       .mode-btn{
@@ -250,11 +280,6 @@
         padding:16px 12px;
         font-size:clamp(20px, 4.8vw, 28px);
         border-radius:18px;
-      }
-
-      .top-hint{
-        top:10px;
-        width:calc(100% - 20px);
       }
 
       .status{
@@ -287,6 +312,7 @@
     <span class="spark"></span>
 
     <div class="card">
+      <img class="cover-back" src="pizza_cafe_cover.png" alt="" aria-hidden="true" />
       <img class="cover" src="pizza_cafe_cover.png" alt="Pizza Cafe cover" />
       <div class="overlay"></div>
 
@@ -310,8 +336,8 @@
     </div>
   </div>
 
-  <audio id="pizzaAudio" preload="auto">
-    <source src="pizza-cafe.wav" type="audio/wav" />
+  <audio id="pizzaAudio" preload="auto" playsinline>
+    <source src="pizza-cafe.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
@@ -325,6 +351,8 @@
 
     let modeChosen = false;
     let chosenLink = "";
+
+    pizzaAudio.load();
 
     function disableButtons() {
       desktopBtn.disabled = true;
