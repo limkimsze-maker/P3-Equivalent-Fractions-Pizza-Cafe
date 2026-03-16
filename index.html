@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Pizza Cafe: Fraction Frenzy</title>
+
+  <style>
+    :root{
+      --bg1:#120014;
+      --bg2:#1d0626;
+      --glow:#ff9f1c;
+      --glow2:#ff4d00;
+      --btnBlue1:#34a3ff;
+      --btnBlue2:#0b63d1;
+      --btnGreen1:#4fe66d;
+      --btnGreen2:#189a38;
+      --text:#fff6d9;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html,body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      font-family:"Arial Rounded MT Bold","Trebuchet MS","Comic Sans MS",sans-serif;
+      background:
+        radial-gradient(circle at 50% 30%, #5a1200 0%, transparent 25%),
+        radial-gradient(circle at 20% 20%, #3c0720 0%, transparent 22%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      color:white;
+    }
+
+    .page{
+      position:relative;
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      overflow:hidden;
+    }
+
+    .spark{
+      position:absolute;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#ffd65c;
+      box-shadow:0 0 12px #ffb300, 0 0 24px #ff6a00;
+      opacity:.8;
+      animation:twinkle 2.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .spark:nth-child(1){top:8%; left:10%; animation-delay:.2s;}
+    .spark:nth-child(2){top:14%; left:82%; animation-delay:1.1s;}
+    .spark:nth-child(3){top:22%; left:20%; animation-delay:.7s;}
+    .spark:nth-child(4){top:30%; left:88%; animation-delay:1.8s;}
+    .spark:nth-child(5){top:70%; left:12%; animation-delay:.4s;}
+    .spark:nth-child(6){top:80%; left:85%; animation-delay:1.4s;}
+    .spark:nth-child(7){top:88%; left:26%; animation-delay:2s;}
+    .spark:nth-child(8){top:10%; left:50%; animation-delay:.9s;}
+
+    @keyframes twinkle{
+      0%,100%{transform:scale(.5); opacity:.35;}
+      50%{transform:scale(1.35); opacity:1;}
+    }
+
+    .card{
+      position:relative;
+      width:min(1200px, 96vw);
+      height:min(680px, 94vh);
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:
+        0 18px 50px rgba(0,0,0,.45),
+        0 0 0 3px rgba(255,170,40,.18) inset;
+      background:#17051f;
+    }
+
+    .cover{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.05) contrast(1.02);
+    }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.18) 40%, rgba(0,0,0,.42)),
+        radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.28) 100%);
+      pointer-events:none;
+    }
+
+    .top-hint{
+      position:absolute;
+      top:14px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:3;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(0,0,0,.35);
+      color:#fff4cc;
+      font-weight:800;
+      font-size:clamp(12px, 1vw, 16px);
+      letter-spacing:.2px;
+      backdrop-filter:blur(4px);
+      box-shadow:0 0 0 1px rgba(255,255,255,.1) inset;
+      text-align:center;
+    }
+
+    .button-wrap{
+      position:absolute;
+      left:50%;
+      bottom:28px;
+      transform:translateX(-50%);
+      width:min(900px, calc(100% - 36px));
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      z-index:3;
+    }
+
+    .mode-btn{
+      appearance:none;
+      border:none;
+      border-radius:22px;
+      padding:20px 18px;
+      min-height:88px;
+      cursor:pointer;
+      font-size:clamp(24px, 2.2vw, 38px);
+      line-height:1.05;
+      font-weight:900;
+      color:var(--text);
+      text-shadow:0 2px 0 rgba(0,0,0,.35);
+      box-shadow:
+        0 10px 0 rgba(0,0,0,.28),
+        0 18px 28px rgba(0,0,0,.28),
+        inset 0 2px 0 rgba(255,255,255,.35),
+        inset 0 -4px 0 rgba(0,0,0,.18);
+      transition:transform .12s ease, filter .12s ease, opacity .18s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+    }
+
+    .mode-btn:hover{
+      transform:translateY(-2px) scale(1.01);
+      filter:brightness(1.04);
+    }
+
+    .mode-btn:active{
+      transform:translateY(5px) scale(.995);
+      box-shadow:
+        0 5px 0 rgba(0,0,0,.28),
+        0 10px 18px rgba(0,0,0,.24),
+        inset 0 2px 0 rgba(255,255,255,.30),
+        inset 0 -3px 0 rgba(0,0,0,.18);
+    }
+
+    .mode-btn[disabled]{
+      cursor:default;
+      opacity:.72;
+      transform:none;
+      filter:none;
+    }
+
+    .desktop{
+      background:linear-gradient(180deg, var(--btnBlue1), var(--btnBlue2));
+    }
+
+    .mobile{
+      background:linear-gradient(180deg, var(--btnGreen1), var(--btnGreen2));
+    }
+
+    .icon{
+      font-size:1.05em;
+      filter:drop-shadow(0 2px 0 rgba(0,0,0,.25));
+    }
+
+    .status{
+      position:absolute;
+      left:50%;
+      bottom:130px;
+      transform:translateX(-50%);
+      z-index:3;
+      min-width:min(500px, calc(100% - 40px));
+      padding:10px 18px;
+      text-align:center;
+      font-weight:900;
+      font-size:clamp(16px, 1.3vw, 22px);
+      color:#fff4cc;
+      text-shadow:0 2px 0 rgba(0,0,0,.35);
+      border-radius:18px;
+      background:rgba(0,0,0,.30);
+      backdrop-filter:blur(4px);
+      box-shadow:0 0 0 1px rgba(255,255,255,.08) inset;
+      opacity:0;
+      transition:opacity .2s ease;
+      pointer-events:none;
+    }
+
+    .status.show{
+      opacity:1;
+    }
+
+    .credit{
+      position:absolute;
+      right:14px;
+      bottom:8px;
+      z-index:3;
+      font-size:12px;
+      color:rgba(255,255,255,.9);
+      text-shadow:0 1px 2px rgba(0,0,0,.45);
+      background:rgba(0,0,0,.25);
+      padding:5px 9px;
+      border-radius:10px;
+    }
+
+    @media (max-width: 780px){
+      .card{
+        width:100vw;
+        height:100vh;
+        border-radius:0;
+      }
+
+      .page{
+        padding:0;
+      }
+
+      .button-wrap{
+        width:calc(100% - 24px);
+        gap:12px;
+        bottom:18px;
+      }
+
+      .mode-btn{
+        min-height:74px;
+        padding:16px 12px;
+        font-size:clamp(20px, 4.8vw, 28px);
+        border-radius:18px;
+      }
+
+      .top-hint{
+        top:10px;
+        width:calc(100% - 20px);
+      }
+
+      .status{
+        bottom:108px;
+        min-width:calc(100% - 24px);
+        font-size:clamp(14px, 4vw, 18px);
+      }
+    }
+
+    @media (max-width: 560px){
+      .button-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .status{
+        bottom:176px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+    <span class="spark"></span>
+
+    <div class="card">
+      <img class="cover" src="pizza_cafe_cover.png" alt="Pizza Cafe cover" />
+      <div class="overlay"></div>
+
+      <div class="top-hint">Tap a mode to hear “Pizza Cafe!” and start</div>
+
+      <div class="status" id="statusText">Loading your mode...</div>
+
+      <div class="button-wrap">
+        <button class="mode-btn desktop" id="desktopBtn" type="button" aria-label="Open Desktop Mode">
+          <span class="icon">🖥️</span>
+          <span>Desktop Mode!</span>
+        </button>
+
+        <button class="mode-btn mobile" id="mobileBtn" type="button" aria-label="Open Mobile Mode">
+          <span class="icon">📱</span>
+          <span>Mobile Mode!</span>
+        </button>
+      </div>
+
+      <div class="credit">Designed by Lim Kim Sze © 2026</div>
+    </div>
+  </div>
+
+  <audio id="pizzaAudio" preload="auto">
+    <source src="pizza-cafe.wav" type="audio/wav" />
+  </audio>
+
+  <script>
+  const DESKTOP_MODE_LINK = "desktop.html";
+  const MOBILE_MODE_LINK  = "mobile.html";
+
+  const desktopBtn = document.getElementById("desktopBtn");
+  const mobileBtn = document.getElementById("mobileBtn");
+  const pizzaAudio = document.getElementById("pizzaAudio");
+  const statusText = document.getElementById("statusText");
+
+  let modeChosen = false;
+  let chosenLink = "";
+
+  function disableButtons() {
+    desktopBtn.disabled = true;
+    mobileBtn.disabled = true;
+  }
+
+  function showStatus(text) {
+    statusText.textContent = text;
+    statusText.classList.add("show");
+  }
+
+  function goTo(link) {
+    window.location.href = link;
+  }
+
+  function startMode(link, label) {
+    if (modeChosen) return;
+    modeChosen = true;
+    chosenLink = link;
+
+    disableButtons();
+    showStatus(`Pizza Cafe! Opening ${label}...`);
+
+    pizzaAudio.pause();
+    pizzaAudio.currentTime = 0;
+
+    const onEnded = () => {
+      pizzaAudio.removeEventListener("ended", onEnded);
+      goTo(chosenLink);
+    };
+
+    pizzaAudio.addEventListener("ended", onEnded, { once: true });
+
+    pizzaAudio.play().catch(() => {
+      pizzaAudio.removeEventListener("ended", onEnded);
+      goTo(chosenLink);
+    });
+  }
+
+  desktopBtn.addEventListener("click", () => {
+    startMode(DESKTOP_MODE_LINK, "Desktop Mode");
+  });
+
+  mobileBtn.addEventListener("click", () => {
+    startMode(MOBILE_MODE_LINK, "Mobile Mode");
+  });
+
+  desktopBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      startMode(DESKTOP_MODE_LINK, "Desktop Mode");
+    }
+  });
+
+  mobileBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      startMode(MOBILE_MODE_LINK, "Mobile Mode");
+    }
+  });
+</script>
+</body>
+</html>
